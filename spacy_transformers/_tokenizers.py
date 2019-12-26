@@ -376,6 +376,7 @@ class SerializableXLNetTokenizer(transformers.XLNetTokenizer, SerializationMixin
         "keep_accents",
         "vocab_bytes",
     ]
+    CONTROL_CHARACTER = "\u2581"
 
     @classmethod
     def blank(cls):
@@ -400,7 +401,7 @@ class SerializableXLNetTokenizer(transformers.XLNetTokenizer, SerializationMixin
         text = clean_accents(text)
         for a, b in self._replacements:
             text = text.replace(a, b)
-        text = clean_extended_unicode(text)
+        text = text.replace(self.CONTROL_CHARACTER, "")
         text = self._replace_re.sub("", text)
         return text.strip()
 
@@ -409,7 +410,7 @@ class SerializableXLNetTokenizer(transformers.XLNetTokenizer, SerializationMixin
         text = clean_accents(text)
         for a, b in self._replacements:
             text = text.replace(a, b)
-        text = clean_extended_unicode(text)
+        text = text.replace(self.CONTROL_CHARACTER, "")
         text = self._replace_re.sub("", text)
         return text.strip()
 
